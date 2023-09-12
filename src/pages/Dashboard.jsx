@@ -6,6 +6,7 @@ import { Navigate } from "react-router-dom";
 export default function Dashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [user, setUser] = useState({});
+  const [status, setStatus] = useState("");
 
   console.log(user);
   useEffect(() => {
@@ -35,39 +36,55 @@ export default function Dashboard() {
         setIsLoggedIn(false);
       }
     };
+
+    // handleOpenDoor();
     validateLogin();
   }, []);
+  const handleOpenDoor = async (e) => {
+    try {
+      const response = await axios.post("http://192.168.4.1/open-door"); // Ganti dengan alamat IP ESP8266 Anda
+      if (response.status === 200) {
+        setStatus("Pintu terbuka.");
+      } else {
+        setStatus("Gagal membuka pintu.");
+      }
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+    }
+  };
   return (
     <>
-      {user.role ? (
-        <div>
-          <div className="dashboard-box">
-            <p className="m-0 text-white">Room {user.room}</p>
-            <h1 className="headline text-center text-uppercase fw-bold">
-              {" "}
-              Welcome to Laras Kost
-            </h1>
-            <div className=" d-flex flex-column gap-3 dash-button">
-              <Button
-                href=""
-                className="w-100 p-5 align-self-center fw-bold"
-                variant="outline-success"
-              >
-                Open
-              </Button>
-              <Button
-                href=""
-                className=" w-100 p-5 align-self-center fw-bold"
-                variant="outline-danger"
-              >
-                Close
-              </Button>
-            </div>
+      {/* {user.role ? ( */}
+      <div>
+        <div className="dashboard-box">
+          <p className="m-0 text-white">Room {user.room}</p>
+          <h1 className="headline text-center text-uppercase fw-bold">
+            {" "}
+            Welcome to Laras Kost
+          </h1>
+          <div className=" d-flex flex-column gap-3 dash-button">
+            <Button
+              eslint-disable-next-line
+              no-undef
+              onClick={handleOpenDoor}
+              className="w-100 p-5 align-self-center fw-bold"
+              variant="outline-success"
+            >
+              Open
+            </Button>
+            <Button
+              href=""
+              className=" w-100 p-5 align-self-center fw-bold"
+              variant="outline-danger"
+            >
+              Close
+            </Button>
           </div>
         </div>
-      ) : (
+      </div>
+      {/* ) : (
         <Navigate to="/Register" />
-      )}
+      )} */}
     </>
   );
 }
