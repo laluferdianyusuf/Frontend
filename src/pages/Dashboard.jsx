@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
 
 export default function Dashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [user, setUser] = useState({});
-  const [status, setStatus] = useState("");
+  const [isLocked, setIsLocked] = useState(true);
 
   console.log(user);
+
   useEffect(() => {
-    const validateLogin = async (e) => {
+    const validateLogin = async () => {
       try {
-        // Check status user login
-        // 1. Get token from localStorage
+        // Check user login status
         const token = localStorage.getItem("token");
 
-        // 2. Check token validity from API
         const currentUserRequest = await axios.get(
           "https://backend-laras.up.railway.app/auth/me",
           {
@@ -37,24 +35,33 @@ export default function Dashboard() {
       }
     };
 
-    // handleOpenDoor();
+    fetchDoorStatus();
     validateLogin();
   }, []);
-  const handleOpenDoor = async (e) => {
+
+  const fetchDoorStatus = async () => {
     try {
-      const response = await axios.post("http://192.168.4.1/open-door"); // Ganti dengan alamat IP ESP8266 Anda
-      if (response.status === 200) {
-        setStatus("Pintu terbuka.");
-      } else {
-        setStatus("Gagal membuka pintu.");
-      }
+      const response = await axios.get("http://172.20.10.8/");
+      setIsLocked(response.data.includes("Locked"));
     } catch (error) {
-      console.error("Terjadi kesalahan:", error);
+      console.error("Failed to fetch door status: ", error);
     }
   };
+
+  const toggleLock = async () => {
+    try {
+      const response = await axios.get(
+        `http://172.20.10.8/${isLocked ? "unlock" : "lock"}`
+      );
+      setIsLocked(!isLocked); // Memperbarui status terbalik
+      console.log(response);
+    } catch (error) {
+      console.error("Failed to toggle door lock: ", error);
+    }
+  };
+
   return (
     <>
-      {/* {user.role ? ( */}
       <div>
         <div className="dashboard-box">
           <p className="m-0 text-white">Room {user.room}</p>
@@ -62,29 +69,30 @@ export default function Dashboard() {
             {" "}
             Welcome to Laras Kost
           </h1>
-          <div className=" d-flex flex-column gap-3 dash-button">
-            <Button
-              eslint-disable-next-line
-              no-undef
-              onClick={handleOpenDoor}
-              className="w-100 p-5 align-self-center fw-bold"
-              variant="outline-success"
-            >
-              Open
-            </Button>
-            <Button
-              href=""
-              className=" w-100 p-5 align-self-center fw-bold"
-              variant="outline-danger"
-            >
-              Close
-            </Button>
+          <p className="text-white">
+            Door is {isLocked ? "Locked" : "Unlocked"}
+          </p>
+          <div className="d-flex flex-column gap-3 dash-button">
+            {isLocked ? (
+              <Button
+                onClick={toggleLock}
+                className="w-100 p-5 align-self-center fw-bold"
+                variant="outline-success"
+              >
+                Unlock the Door
+              </Button>
+            ) : (
+              <Button
+                onClick={toggleLock}
+                className="w-100 p-5 align-self-center fw-bold"
+                variant="outline-danger"
+              >
+                Lock the Door
+              </Button>
+            )}
           </div>
         </div>
       </div>
-      {/* ) : (
-        <Navigate to="/Register" />
-      )} */}
     </>
   );
 }
