@@ -31,7 +31,7 @@ export default function Register() {
       };
 
       const registerRequest = await axios.post(
-        "https://backend-laras.up.railway.app/auth/registerUser",
+        "https://backend-production-37f3.up.railway.app/auth/registerUser",
         userToRegisterPayload
       );
 
