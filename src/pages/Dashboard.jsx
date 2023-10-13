@@ -35,14 +35,14 @@ export default function Dashboard() {
       }
     };
 
-    fetchDoorStatus();
     validateLogin();
+    fetchDoorStatus();
   }, []);
 
   const fetchDoorStatus = async () => {
     try {
-      const response = await axios.get("http://172.20.10.8/");
-      setIsLocked(response.data.includes("Locked"));
+      const response = await axios.get("http://172.20.10.8/door/status");
+      setIsLocked(response.data.isLocked);
     } catch (error) {
       console.error("Failed to fetch door status: ", error);
     }
@@ -50,9 +50,7 @@ export default function Dashboard() {
 
   const toggleLock = async () => {
     try {
-      const response = await axios.get(
-        `http://172.20.10.8/${isLocked ? "unlock" : "lock"}`
-      );
+      const response = await axios.post("http://172.20.10.8/door/toggle");
       setIsLocked(!isLocked); // Memperbarui status terbalik
       console.log(response);
     } catch (error) {
