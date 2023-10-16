@@ -41,22 +41,24 @@ export default function Dashboard() {
 
   const fetchDoorStatus = async () => {
     try {
-      const response = await axios.get("http://172.20.10.8/door/status");
+      const response = await axios.get("http://192.168.43.221/door/status");
       setIsLocked(response.data.isLocked);
     } catch (error) {
       console.error("Failed to fetch door status: ", error);
     }
   };
+  console.log(fetchDoorStatus);
 
   const toggleLock = async () => {
     try {
-      const response = await axios.post("http://172.20.10.8/door/toggle");
+      const response = await axios.post("http://192.168.43.221/door/toggle");
       setIsLocked(!isLocked); // Memperbarui status terbalik
       console.log(response);
     } catch (error) {
       console.error("Failed to toggle door lock: ", error);
     }
   };
+  console.log(toggleLock);
 
   return (
     <>
