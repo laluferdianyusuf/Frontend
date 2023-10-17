@@ -39,9 +39,14 @@ export default function Login() {
       const loginResponse = loginRequest.data;
 
       if (loginResponse.status) {
+        const { email } = userToLoginPayload;
         localStorage.setItem("token", loginResponse.data.token);
 
-        navigate("/Dashboard");
+        if (email === "superadmin@gmail.com") {
+          navigate("/Register");
+        } else {
+          navigate("/Dashboard");
+        }
         setLoading(!loading);
       }
     } catch (err) {

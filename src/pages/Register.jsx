@@ -6,7 +6,6 @@ import "../style/All.css";
 
 export default function Register() {
   const navigate = useNavigate();
-
   const nameField = useRef("");
   const emailField = useRef("");
   const roleField = useRef("");
@@ -29,16 +28,24 @@ export default function Register() {
         room: roomField.current.value,
         password: passwordField.current.value,
       };
+      const token = localStorage.getItem("token");
 
       const registerRequest = await axios.post(
         "https://backend-production-37f3.up.railway.app/auth/registerUser",
-        userToRegisterPayload
+        userToRegisterPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       const registerResponse = registerRequest.data;
       console.log(registerRequest);
 
-      if (registerResponse.status) navigate("/");
+      if (registerResponse.status) {
+        navigate("/");
+      }
     } catch (err) {
       console.log(err);
       const response = err.response.data;
