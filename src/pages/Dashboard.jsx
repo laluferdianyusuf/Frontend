@@ -16,7 +16,7 @@ export default function Dashboard() {
         const token = localStorage.getItem("token");
 
         const currentUserRequest = await axios.get(
-          "https://backend-production-37f3.up.railway.app/auth/me",
+          "https://backend-production-7ed6.up.railway.app/auth/me",
           {
             headers: {
               Authorization: `Bearer ${token}`,

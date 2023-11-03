@@ -32,7 +32,7 @@ export default function Login() {
       };
 
       const loginRequest = await axios.post(
-        "https://backend-production-37f3.up.railway.app/auth/login",
+        "https://backend-production-7ed6.up.railway.app/auth/login",
         userToLoginPayload
       );
 
