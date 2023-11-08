@@ -41,7 +41,7 @@ export default function Dashboard() {
 
   const fetchDoorStatus = async () => {
     try {
-      const response = await axios.get("https://192.168.43.221/door/status");
+      const response = await axios.get("http://192.168.43.221/door/status");
       setIsLocked(response.data.isLocked);
     } catch (error) {
       console.error("Failed to fetch door status: ", error);
@@ -51,7 +51,7 @@ export default function Dashboard() {
 
   const toggleLock = async () => {
     try {
-      const response = await axios.post("https://192.168.43.221/door/toggle");
+      const response = await axios.post("http://192.168.43.221/door/toggle");
       setIsLocked(!isLocked); // Memperbarui status terbalik
       console.log(response);
     } catch (error) {
