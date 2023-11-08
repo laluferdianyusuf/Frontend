@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Button, Alert, Image, Row, Col } from "react-bootstrap";
+import { Button, Image, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "../style/All.css";
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import doorImg from "../images/door-knob.png";
+import { useSnackbar } from "notistack";
 
 export default function LoginUser() {
   const { number } = useParams();
@@ -12,16 +13,12 @@ export default function LoginUser() {
   const navigate = useNavigate();
   const emailField = useRef("");
   const passwordField = useRef("");
+  const { enqueueSnackbar } = useSnackbar();
 
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
-  const [errorResponse, setErrorResponse] = useState({
-    isError: false,
-    message: "",
-  });
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -38,10 +35,15 @@ export default function LoginUser() {
       );
 
       const loginResponse = loginRequest.data;
+      console.log(loginResponse);
 
       if (loginResponse.status) {
         localStorage.setItem("token", loginResponse.data.token);
-
+        enqueueSnackbar(`${loginResponse.message} `, {
+          variant: "success",
+          anchorOrigin: { vertical: "top", horizontal: "center" },
+          autoHideDuration: 2000,
+        });
         navigate("/dashboard");
         setLoading(!loading);
       }
@@ -49,9 +51,10 @@ export default function LoginUser() {
       const response = err.response.data;
       console.log(response);
 
-      setErrorResponse({
-        isError: true,
-        message: response.message,
+      enqueueSnackbar(`${response.message} `, {
+        variant: "error",
+        anchorOrigin: { vertical: "top", horizontal: "center" },
+        autoHideDuration: 2000,
       });
     }
   };
@@ -97,10 +100,6 @@ export default function LoginUser() {
               </Button>
               <label>Password</label>
             </div>
-
-            {errorResponse.isError && (
-              <Alert variant="danger">{errorResponse.message}</Alert>
-            )}
 
             <div className="d-flex gap-2 option-login justify-content-between">
               <Button className="button-submit" type="submit">

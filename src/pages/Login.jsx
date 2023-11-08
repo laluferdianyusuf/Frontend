@@ -1,26 +1,23 @@
 import React, { useRef, useState } from "react";
-import { Button, Alert, Image, Row, Col } from "react-bootstrap";
+import { Button, Image, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../style/All.css";
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import doorImg from "../images/door-knob.png";
+import { useSnackbar } from "notistack";
 
 export default function Login() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const emailField = useRef("");
   const passwordField = useRef("");
+  const { enqueueSnackbar } = useSnackbar();
 
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
-  const [errorResponse, setErrorResponse] = useState({
-    isError: false,
-    message: "",
-  });
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -47,15 +44,20 @@ export default function Login() {
         } else {
           navigate("/Dashboard");
         }
+        enqueueSnackbar(`${loginResponse.message} `, {
+          variant: "success",
+          anchorOrigin: { vertical: "top", horizontal: "center" },
+          autoHideDuration: 2000,
+        });
         setLoading(!loading);
       }
     } catch (err) {
       const response = err.response.data;
       console.log(response);
-
-      setErrorResponse({
-        isError: true,
-        message: response.message,
+      enqueueSnackbar(`${response.message} `, {
+        variant: "success",
+        anchorOrigin: { vertical: "top", horizontal: "center" },
+        autoHideDuration: 2000,
       });
     }
   };
@@ -101,10 +103,6 @@ export default function Login() {
               </Button>
               <label>Password</label>
             </div>
-
-            {errorResponse.isError && (
-              <Alert variant="danger">{errorResponse.message}</Alert>
-            )}
 
             <div className="d-flex gap-2 option-login justify-content-between">
               <Button className="button-submit" type="submit">

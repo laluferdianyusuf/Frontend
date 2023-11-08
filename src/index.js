@@ -7,16 +7,21 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import LoginUser from "./pages/LoginUser";
 import Dashboard from "./pages/Dashboard";
+import DashboardUser from "./pages/DashboardUser";
+import { SnackbarProvider } from "notistack";
 
 const root = document.getElementById("root");
 render(
-  <Router>
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/login/:number" element={<LoginUser />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-    </Routes>
-  </Router>,
+  <SnackbarProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/rooms" element={<DashboardUser />} />
+        <Route path="/login/:number" element={<LoginUser />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  </SnackbarProvider>,
   root
 );
