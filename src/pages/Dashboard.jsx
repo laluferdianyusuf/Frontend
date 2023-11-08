@@ -47,7 +47,6 @@ export default function Dashboard() {
       console.error("Failed to fetch door status: ", error);
     }
   };
-  console.log(fetchDoorStatus);
 
   const toggleLock = async () => {
     try {
@@ -58,7 +57,6 @@ export default function Dashboard() {
       console.error("Failed to toggle door lock: ", error);
     }
   };
-  console.log(toggleLock);
 
   return (
     <>
