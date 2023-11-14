@@ -15,8 +15,8 @@ render(
   <SnackbarProvider>
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/rooms" element={<DashboardUser />} />
+        <Route path="/" element={<DashboardUser />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/login/:number" element={<LoginUser />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
