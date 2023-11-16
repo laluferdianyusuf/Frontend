@@ -29,7 +29,7 @@ export default function Login() {
       };
 
       const loginRequest = await axios.post(
-        "https://backend-production-7ed6.up.railway.app/auth/login",
+        "http://localhost:1010/auth/login",
         userToLoginPayload
       );
 
@@ -55,7 +55,7 @@ export default function Login() {
       const response = err.response.data;
       console.log(response);
       enqueueSnackbar(`${response.message} `, {
-        variant: "success",
+        variant: "error",
         anchorOrigin: { vertical: "top", horizontal: "center" },
         autoHideDuration: 2000,
       });

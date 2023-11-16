@@ -30,7 +30,7 @@ export default function LoginUser() {
       };
 
       const loginRequest = await axios.post(
-        `https://backend-production-7ed6.up.railway.app/auth/login/${number}`,
+        `http://localhost:1010/auth/login/${number}`,
         userToLoginPayload
       );
 
